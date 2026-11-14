@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>AntigravityZh</AssemblyName>
+    <RootNamespace>AntigravityZh</RootNamespace>
+    <Version>0.1.0</Version>
+    <Authors>wachg-studio</Authors>
+    <Description>Unofficial Chinese localization layer for Google Antigravity.</Description>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <PublishAot>true</PublishAot>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>embedded</DebugType>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\dict.json" />
+    <EmbeddedResource Include="Resources\inject.js" />
+  </ItemGroup>
+
+</Project>

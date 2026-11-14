@@ -1,0 +1,49 @@
+name: build
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish NativeAOT
+        run: >
+          dotnet publish src/AntigravityZh/AntigravityZh.csproj
+          -c Release -r win-x64 -p:PublishAot=true -o dist
+
+      - name: Package
+        shell: pwsh
+        run: |
+          Copy-Item README.md, LICENSE -Destination dist
+          Copy-Item scripts\*.cmd -Destination dist
+          Compress-Archive -Path dist\* -DestinationPath AntigravityZh-win-x64.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AntigravityZh-win-x64
+          path: AntigravityZh-win-x64.zip
+
+      - name: Create release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" `
+            "AntigravityZh-win-x64.zip" `
+            --title "AntigravityZh ${{ github.ref_name }}" `
+            --notes "See README for installation and usage."
